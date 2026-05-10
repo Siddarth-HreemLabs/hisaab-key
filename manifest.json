@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "Hisaab Key",
+  "version": "1.0.0",
+  "description": "Unlocks CORS for local Tally XML server so Hisaab can read data directly from the browser.",
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "http://localhost:9000/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "hisaab-key@hisaab.in",
+      "strict_min_version": "57.0"
+    }
+  }
+}
