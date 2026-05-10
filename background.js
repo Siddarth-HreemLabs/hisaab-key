@@ -5,6 +5,9 @@
 
 browser.webRequest.onHeadersReceived.addListener(
   function (details) {
+    console.log('[HisaabKey] intercepted', details.method, details.url, 'status:', details.statusCode)
+    console.log('[HisaabKey] original headers:', JSON.stringify(details.responseHeaders))
+
     // Remove any existing CORS headers Tally may have set (avoids duplicates)
     const headers = details.responseHeaders.filter(function (h) {
       const name = h.name.toLowerCase()
@@ -19,8 +22,11 @@ browser.webRequest.onHeadersReceived.addListener(
     headers.push({ name: 'Access-Control-Allow-Methods', value: 'GET, POST, OPTIONS' })
     headers.push({ name: 'Access-Control-Allow-Headers', value: 'Content-Type' })
 
+    console.log('[HisaabKey] patched headers:', JSON.stringify(headers))
     return { responseHeaders: headers }
   },
   { urls: ['http://localhost:9000/*'] },
   ['blocking', 'responseHeaders']
 )
+
+console.log('[HisaabKey] listener registered for http://localhost:9000/*')
