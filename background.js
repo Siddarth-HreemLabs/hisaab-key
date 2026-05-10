@@ -25,7 +25,7 @@ try {
   // CORS injector — blocking, only for Tally
   browser.webRequest.onHeadersReceived.addListener(
     function (details) {
-      console.log('[HisaabKey] RESPONSE', details.statusCode, details.url)
+      console.log('[HisaabKey] original headers:', JSON.stringify(details.responseHeaders))
 
       const headers = details.responseHeaders.filter(function (h) {
         const n = h.name.toLowerCase()
@@ -36,6 +36,8 @@ try {
       headers.push({ name: 'Access-Control-Allow-Origin',  value: '*' })
       headers.push({ name: 'Access-Control-Allow-Methods', value: 'GET, POST, OPTIONS' })
       headers.push({ name: 'Access-Control-Allow-Headers', value: 'Content-Type' })
+
+      console.log('[HisaabKey] modified headers:', JSON.stringify(headers))
       return { responseHeaders: headers }
     },
     TALLY_FILTER,
