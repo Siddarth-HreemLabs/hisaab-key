@@ -11,6 +11,18 @@ try {
     { urls: ['<all_urls>'] }
   )
 
+  // Debug: log every response to confirm onHeadersReceived fires at all
+  browser.webRequest.onHeadersReceived.addListener(
+    function (details) {
+      const u = details.url
+      if (u.includes('localhost') || u.includes('9000') || u.includes('google')) {
+        console.log('[HisaabKey] RESPONSE (debug)', details.statusCode, u)
+      }
+    },
+    { urls: ['<all_urls>'] }
+  )
+
+  // CORS injector — blocking, only for Tally
   browser.webRequest.onHeadersReceived.addListener(
     function (details) {
       console.log('[HisaabKey] RESPONSE', details.statusCode, details.url)
