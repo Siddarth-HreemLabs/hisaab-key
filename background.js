@@ -1,20 +1,11 @@
-// Hisaab Key — debug build
-
-const TALLY_FILTER = { urls: ['http://localhost:9000/*'] }
+// Hisaab Key
 
 try {
-  // Broad listener: log every request so we can confirm webRequest fires at all.
-  browser.webRequest.onBeforeRequest.addListener(
-    function (details) {
-      console.log('[HisaabKey] REQUEST →', details.method, details.url)
-    },
-    { urls: ['<all_urls>'] }
-  )
-
-  // CORS injector — blocking, only for Tally
   browser.webRequest.onHeadersReceived.addListener(
     function (details) {
-      console.log('[HisaabKey] original headers:', JSON.stringify(details.responseHeaders))
+      if (!details.url.includes('localhost:9000')) {
+        return {}
+      }
 
       const headers = details.responseHeaders.filter(function (h) {
         const n = h.name.toLowerCase()
@@ -26,21 +17,13 @@ try {
       headers.push({ name: 'Access-Control-Allow-Methods', value: 'GET, POST, OPTIONS' })
       headers.push({ name: 'Access-Control-Allow-Headers', value: 'Content-Type' })
 
-      console.log('[HisaabKey] modified headers:', JSON.stringify(headers))
       return { responseHeaders: headers }
     },
-    TALLY_FILTER,
+    { urls: ['<all_urls>'] },
     ['blocking', 'responseHeaders']
   )
 
-  browser.webRequest.onErrorOccurred.addListener(
-    function (details) {
-      console.log('[HisaabKey] ERROR', details.error, details.url)
-    },
-    TALLY_FILTER
-  )
-
-  console.log('[HisaabKey] all listeners registered OK')
+  console.log('[HisaabKey] active')
 } catch (e) {
-  console.error('[HisaabKey] FAILED to register listeners:', e)
+  console.error('[HisaabKey] failed to register:', e)
 }
