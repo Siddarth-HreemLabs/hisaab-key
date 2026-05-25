@@ -1,0 +1,11 @@
+{
+  "version": {
+    "license": "MPL-2.0"
+  },
+  "addon": {
+    "summary": "Unlocks CORS for the local Tally XML server so Hisaab can read accounting data directly from your browser.",
+    "categories": {
+      "firefox": ["bookmarks"]
+    }
+  }
+}
